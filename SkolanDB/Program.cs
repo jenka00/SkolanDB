@@ -11,8 +11,8 @@ namespace SkolaTest
             bool isRunning = true;
             do
             {                
-                using SchoolDbContext Context = new SchoolDbContext();              
-
+                using SchoolDbContext Context = new SchoolDbContext();
+              
                 Console.WriteLine("Välkommen till Gymnasieskolan.");
                 Console.WriteLine("Välj vad du vill göra." +
                                     "\n1. Se skolans personal" +
@@ -231,9 +231,9 @@ namespace SkolaTest
                                 Console.WriteLine("Biologi 1:");
                                 foreach (var grade in BiologyGrades)
                                 {
-                                    Console.WriteLine($"Medelbetyg: {grade.AverageGradeBiology1}");
-                                    Console.WriteLine($"Högsta betyg: {grade.HighestGradeBiology1}");
-                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGradeBiology1}");
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
                                 break;
@@ -244,9 +244,9 @@ namespace SkolaTest
                                 Console.WriteLine("Kemi 1:");
                                 foreach (var grade in Chemistry1Grades)
                                 {
-                                    Console.WriteLine($"Medelbetyg: {grade.AverageGradeChemistry1}");
-                                    Console.WriteLine($"Högsta betyg: {grade.HighestGradeChemistry1}");
-                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGradeChemistry1}");
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
 
@@ -259,9 +259,22 @@ namespace SkolaTest
                                 Console.WriteLine("Engelska 1:");
                                 foreach (var grade in GradesEnglish1)
                                 {
-                                    Console.WriteLine($"Medelbetyg: {grade.AverageGradeEnglish1}");
-                                    Console.WriteLine($"Högsta betyg: {grade.HighestGradeEnglish1}");
-                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGradeEnglish1}");
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
+                                    Console.WriteLine(new string('-', (20)));
+                                }
+                                break;
+                            case "5":
+                                var GradesEnglish2 = from VWgradesEnglish2 in Context.VWgradesEnglish1
+                                                     select VWgradesEnglish2;
+
+                                Console.WriteLine("Engelska 1:");
+                                foreach (var grade in GradesEnglish2)
+                                {
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
                                 break;
@@ -284,7 +297,7 @@ namespace SkolaTest
                             Context.SaveChanges();
                         }
                         else if (role == "LÄRARE")
-                        {
+                        {                           
                             Teacher newTeacher = new Teacher { Fname = firstNameInput, Lname = lastNameInput, Role = "Teacher" };
                             Context.Teacher.Add(newTeacher);
                             Context.SaveChanges();

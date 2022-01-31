@@ -28,10 +28,13 @@ namespace SkolanDB.Models
         public virtual DbSet<StudentCourse> StudentCourse { get; set; }
         public virtual DbSet<StudentGrade> StudentGrade { get; set; }
         public virtual DbSet<Teacher> Teacher { get; set; }
+        public virtual DbSet<VWallCoursesAllGrades> VWallCoursesAllGrades { get; set; }
         public virtual DbSet<VWgradesBiology1> VWgradesBiology1 { get; set; }
         public virtual DbSet<VWgradesChemistry1> VWgradesChemistry1 { get; set; }
         public virtual DbSet<VWgradesEnglish1> VWgradesEnglish1 { get; set; }
         public virtual DbSet<VWgradesEnglish2> VWgradesEnglish2 { get; set; }
+        public virtual DbSet<VWgradesHistory1> VWgradesHistory1 { get; set; }
+        public virtual DbSet<VWgradesHistory2> VWgradesHistory2 { get; set; }
         public virtual DbSet<VWgradesMathematics1> VWgradesMathematics1 { get; set; }
         public virtual DbSet<VWgradesOneMonth> VWgradesOneMonth { get; set; }
         public virtual DbSet<VWgradesSwedish1> VWgradesSwedish1 { get; set; }
@@ -53,9 +56,7 @@ namespace SkolanDB.Models
         {
             modelBuilder.Entity<Admin>(entity =>
             {
-                entity.Property(e => e.AdminId)
-                    .HasColumnName("AdminID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.AdminId).HasColumnName("AdminID");
 
                 entity.Property(e => e.Fname)
                     .IsRequired()
@@ -74,9 +75,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<Class>(entity =>
             {
-                entity.Property(e => e.ClassId)
-                    .HasColumnName("ClassID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.ClassId).HasColumnName("ClassID");
 
                 entity.Property(e => e.ClassName)
                     .IsRequired()
@@ -87,9 +86,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<Course>(entity =>
             {
-                entity.Property(e => e.CourseId)
-                    .HasColumnName("CourseID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.CourseId).HasColumnName("CourseID");
 
                 entity.Property(e => e.CourseName)
                     .IsRequired()
@@ -103,16 +100,12 @@ namespace SkolanDB.Models
                 entity.HasKey(e => e.GradeId)
                     .HasName("PK_Grade");
 
-                entity.Property(e => e.GradeId)
-                    .HasColumnName("GradeID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.GradeId).HasColumnName("GradeID");
             });
 
             modelBuilder.Entity<HeadMaster>(entity =>
             {
-                entity.Property(e => e.HeadMasterId)
-                    .HasColumnName("HeadMasterID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.HeadMasterId).HasColumnName("HeadMasterID");
 
                 entity.Property(e => e.Fname)
                     .IsRequired()
@@ -131,9 +124,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<Student>(entity =>
             {
-                entity.Property(e => e.StudentId)
-                    .HasColumnName("StudentID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.StudentId).HasColumnName("StudentID");
 
                 entity.Property(e => e.FkclassId).HasColumnName("FKClassID");
 
@@ -164,9 +155,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<StudentCourse>(entity =>
             {
-                entity.Property(e => e.StudentCourseId)
-                    .HasColumnName("StudentCourseID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.StudentCourseId).HasColumnName("StudentCourseID");
 
                 entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
 
@@ -192,9 +181,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<StudentGrade>(entity =>
             {
-                entity.Property(e => e.StudentGradeId)
-                    .HasColumnName("StudentGradeID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.StudentGradeId).HasColumnName("StudentGradeID");
 
                 entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
 
@@ -233,9 +220,7 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<Teacher>(entity =>
             {
-                entity.Property(e => e.TeacherId)
-                    .HasColumnName("TeacherID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
 
                 entity.Property(e => e.Fname)
                     .IsRequired()
@@ -252,17 +237,38 @@ namespace SkolanDB.Models
                     .HasMaxLength(50);
             });
 
+            modelBuilder.Entity<VWallCoursesAllGrades>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWAllCoursesAllGrades");
+
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
+            });
+
             modelBuilder.Entity<VWgradesBiology1>(entity =>
             {
                 entity.HasNoKey();
 
                 entity.ToView("vWGradesBiology1");
 
-                entity.Property(e => e.AverageGradeBiology1).HasColumnName("Average grade Biology 1");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeBiology1).HasColumnName("Highest grade Biology 1");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeBiology1).HasColumnName("Lowest grade Biology 1");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesChemistry1>(entity =>
@@ -271,11 +277,15 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesChemistry1");
 
-                entity.Property(e => e.AverageGradeChemistry1).HasColumnName("Average grade Chemistry 1");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeChemistry1).HasColumnName("Highest grade Chemistry 1");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeChemistry1).HasColumnName("Lowest grade Chemistry 1");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesEnglish1>(entity =>
@@ -284,11 +294,15 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesEnglish1");
 
-                entity.Property(e => e.AverageGradeEnglish1).HasColumnName("Average grade English 1");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeEnglish1).HasColumnName("Highest grade English 1");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeEnglish1).HasColumnName("Lowest grade English 1");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesEnglish2>(entity =>
@@ -297,11 +311,49 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesEnglish2");
 
-                entity.Property(e => e.AverageGradeEnglish2).HasColumnName("Average grade English 2");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeEnglish2).HasColumnName("Highest grade English 2");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeEnglish2).HasColumnName("Lowest grade English 2");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
+            });
+
+            modelBuilder.Entity<VWgradesHistory1>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWGradesHistory1");
+
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
+            });
+
+            modelBuilder.Entity<VWgradesHistory2>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWGradesHistory2");
+
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesMathematics1>(entity =>
@@ -310,11 +362,15 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesMathematics1");
 
-                entity.Property(e => e.AverageGradeMathematics1).HasColumnName("Average grade Mathematics 1");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeMathematics1).HasColumnName("Highest grade Mathematics 1");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeMathematics1).HasColumnName("Lowest grade Mathematics 1");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesOneMonth>(entity =>
@@ -350,11 +406,15 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesSwedish1");
 
-                entity.Property(e => e.AverageGradeSwedish1).HasColumnName("Average grade Swedish 1");
+                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
 
-                entity.Property(e => e.HighestGradeSwedish1).HasColumnName("Highest grade Swedish 1");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
-                entity.Property(e => e.LowestGradeSwedish1).HasColumnName("Lowest grade Swedish 1");
+                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+
+                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWshowAllAdmin>(entity =>

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class VWgradesBiology1
+    public partial class VWallCoursesAllGrades
     {
         public string CourseName { get; set; }
         public int? AverageGrade { get; set; }

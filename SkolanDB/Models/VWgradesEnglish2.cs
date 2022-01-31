@@ -9,8 +9,9 @@ namespace SkolanDB.Models
 {
     public partial class VWgradesEnglish2
     {
-        public int? AverageGradeEnglish2 { get; set; }
-        public int? HighestGradeEnglish2 { get; set; }
-        public int? LowestGradeEnglish2 { get; set; }
+        public string CourseName { get; set; }
+        public int? AverageGrade { get; set; }
+        public int? HighestGrade { get; set; }
+        public int? LowestGrade { get; set; }
     }
 }

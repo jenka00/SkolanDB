@@ -102,24 +102,65 @@ namespace SkolaTest
                         switch (studentChoice)
                         {
                             case "1":
-                                //Console.WriteLine("Välj hur listan ska sorteras" +
-                                //    "\n1. I bokstavsordning efter förnamn - stigande sortering" +
-                                //"\n2. I bokstavsordning efter förnamn - fallande sortering" +
-                                //"\n3. I bokstavsordning efter efternamn" +
-                                //"\n4. I bokstavsordning efter efternamn");
+                                Console.WriteLine("Välj hur listan ska sorteras" +
+                                "\n1. I bokstavsordning efter förnamn - stigande sortering" +
+                                "\n2. I bokstavsordning efter förnamn - fallande sortering" +
+                                "\n3. I bokstavsordning efter efternamn - stigande sortering" +
+                                "\n4. I bokstavsordning efter efternamn - fallande sortering");
 
-                                //string sortingOrder = Console.ReadLine();                            
-
-                                var allStudents = from Student in Context.Student
-                                                  orderby Student.Lname
-                                                  select Student;
-
-                                Console.WriteLine("Alla elever på skolan:");
-                                foreach (var student in allStudents)
+                                string sortingOrder = Console.ReadLine();
+                                if (sortingOrder == "1")
                                 {
-                                    Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
-                                    Console.WriteLine(new string('-', (20)));
+                                    var allStudents = from Student in Context.Student
+                                                      orderby Student.Fname
+                                                      select Student;
+
+                                    Console.WriteLine("Alla elever på skolan:");
+                                    foreach (var student in allStudents)
+                                    {
+                                        Console.WriteLine($"Namn: {student.Fname} {student.Fname} Personnummer: {student.PersonalNumber}");
+                                        Console.WriteLine(new string('-', (20)));
+                                    }
                                 }
+                                else if (sortingOrder == "2")
+                                {
+                                    var allStudents = from Student in Context.Student
+                                                      orderby Student.Lname descending
+                                                      select Student;
+
+                                    Console.WriteLine("Alla elever på skolan:");
+                                    foreach (var student in allStudents)
+                                    {
+                                        Console.WriteLine($"Namn: {student.Fname} {student.Fname} Personnummer: {student.PersonalNumber}");
+                                        Console.WriteLine(new string('-', (20)));
+                                    }
+                                }
+                                else if (sortingOrder == "3")
+                                {
+                                    var allStudents = from Student in Context.Student
+                                                      orderby Student.Lname
+                                                      select Student;
+
+                                    Console.WriteLine("Alla elever på skolan:");
+                                    foreach (var student in allStudents)
+                                    {
+                                        Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
+                                        Console.WriteLine(new string('-', (20)));
+                                    }
+                                }
+                                else if (sortingOrder == "4")
+                                {
+                                    var allStudents = from Student in Context.Student
+                                                      orderby Student.Lname descending
+                                                      select Student;
+
+                                    Console.WriteLine("Alla elever på skolan:");
+                                    foreach (var student in allStudents)
+                                    {
+                                        Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
+                                        Console.WriteLine(new string('-', (20)));
+                                    }
+                                }                              
                                 break;
                             case "2":
                                 var Class1A = from Student in Context.Student
@@ -213,6 +254,7 @@ namespace SkolaTest
                         switch (gradeChoice)
                         {
                             case "1":
+
                                 var lastMonthsGrades = from VWgradesOneMonth in Context.VWgradesOneMonth
                                                        select VWgradesOneMonth;
                                 Console.WriteLine("Betyg som satts senaste månaden:");

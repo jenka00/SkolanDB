@@ -17,7 +17,6 @@ namespace SkolanDB.Models
 
         public int CourseId { get; set; }
         public string CourseName { get; set; }
-        public DateTime StartDate { get; set; }
 
         public virtual ICollection<StudentCourse> StudentCourse { get; set; }
         public virtual ICollection<StudentGrade> StudentGrade { get; set; }

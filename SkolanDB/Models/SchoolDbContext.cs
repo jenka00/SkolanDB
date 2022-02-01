@@ -91,8 +91,6 @@ namespace SkolanDB.Models
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.StartDate).HasColumnType("date");
             });
 
             modelBuilder.Entity<Grades>(entity =>
@@ -163,19 +161,24 @@ namespace SkolanDB.Models
 
                 entity.Property(e => e.FkteacherId).HasColumnName("FKTeacherID");
 
+                entity.Property(e => e.StartDate).HasColumnType("date");
+
                 entity.HasOne(d => d.Fkcourse)
                     .WithMany(p => p.StudentCourse)
                     .HasForeignKey(d => d.FkcourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StudentCourse_Course");
 
                 entity.HasOne(d => d.Fkstudent)
                     .WithMany(p => p.StudentCourse)
                     .HasForeignKey(d => d.FkstudentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StudentCourse_Student");
 
                 entity.HasOne(d => d.Fkteacher)
                     .WithMany(p => p.StudentCourse)
                     .HasForeignKey(d => d.FkteacherId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StudentCourse_Teacher");
             });
 

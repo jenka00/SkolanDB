@@ -10,9 +10,10 @@ namespace SkolanDB.Models
     public partial class StudentCourse
     {
         public int StudentCourseId { get; set; }
-        public int? FkstudentId { get; set; }
-        public int? FkcourseId { get; set; }
-        public int? FkteacherId { get; set; }
+        public int FkstudentId { get; set; }
+        public int FkcourseId { get; set; }
+        public int FkteacherId { get; set; }
+        public DateTime StartDate { get; set; }
 
         public virtual Course Fkcourse { get; set; }
         public virtual Student Fkstudent { get; set; }

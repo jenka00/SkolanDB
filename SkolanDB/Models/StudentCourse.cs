@@ -12,11 +12,13 @@ namespace SkolanDB.Models
         public int StudentCourseId { get; set; }
         public int FkstudentId { get; set; }
         public int FkcourseId { get; set; }
-        public int FkteacherId { get; set; }
+        public int FkemploymentId { get; set; }
         public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int? Grade { get; set; }
 
         public virtual Course Fkcourse { get; set; }
+        public virtual Employee Fkemployment { get; set; }
         public virtual Student Fkstudent { get; set; }
-        public virtual Teacher Fkteacher { get; set; }
     }
 }

@@ -10,8 +10,8 @@ namespace SkolanDB.Models
     public partial class VWgradesMathematics1
     {
         public string CourseName { get; set; }
-        public int? AverageGrade { get; set; }
         public int? HighestGrade { get; set; }
         public int? LowestGrade { get; set; }
+        public int? AverageGrade { get; set; }
     }
 }

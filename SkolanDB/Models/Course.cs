@@ -12,13 +12,14 @@ namespace SkolanDB.Models
         public Course()
         {
             StudentCourse = new HashSet<StudentCourse>();
-            StudentGrade = new HashSet<StudentGrade>();
         }
 
         public int CourseId { get; set; }
         public string CourseName { get; set; }
+        public int? CourseLenghtDays { get; set; }
+        public int? FkdepartmentId { get; set; }
 
+        public virtual Department Fkdepartment { get; set; }
         public virtual ICollection<StudentCourse> StudentCourse { get; set; }
-        public virtual ICollection<StudentGrade> StudentGrade { get; set; }
     }
 }

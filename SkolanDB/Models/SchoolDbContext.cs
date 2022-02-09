@@ -19,25 +19,30 @@ namespace SkolanDB.Models
         {
         }
 
-        public virtual DbSet<Admin> Admin { get; set; }
         public virtual DbSet<Class> Class { get; set; }
         public virtual DbSet<Course> Course { get; set; }
-        public virtual DbSet<Grades> Grades { get; set; }
-        public virtual DbSet<HeadMaster> HeadMaster { get; set; }
+        public virtual DbSet<Department> Department { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<EmployeeDepartment> EmployeeDepartment { get; set; }
+        public virtual DbSet<Role> Role { get; set; }
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<StudentCourse> StudentCourse { get; set; }
-        public virtual DbSet<StudentGrade> StudentGrade { get; set; }
-        public virtual DbSet<Teacher> Teacher { get; set; }
         public virtual DbSet<VWallCoursesAllGrades> VWallCoursesAllGrades { get; set; }
         public virtual DbSet<VWgradesBiology1> VWgradesBiology1 { get; set; }
         public virtual DbSet<VWgradesChemistry1> VWgradesChemistry1 { get; set; }
         public virtual DbSet<VWgradesEnglish1> VWgradesEnglish1 { get; set; }
         public virtual DbSet<VWgradesEnglish2> VWgradesEnglish2 { get; set; }
+        public virtual DbSet<VWgradesEnglish3> VWgradesEnglish3 { get; set; }
         public virtual DbSet<VWgradesHistory1> VWgradesHistory1 { get; set; }
         public virtual DbSet<VWgradesHistory2> VWgradesHistory2 { get; set; }
         public virtual DbSet<VWgradesMathematics1> VWgradesMathematics1 { get; set; }
+        public virtual DbSet<VWgradesMathematics2> VWgradesMathematics2 { get; set; }
+        public virtual DbSet<VWgradesMathematics3> VWgradesMathematics3 { get; set; }
         public virtual DbSet<VWgradesOneMonth> VWgradesOneMonth { get; set; }
         public virtual DbSet<VWgradesSwedish1> VWgradesSwedish1 { get; set; }
+        public virtual DbSet<VWgradesSwedish2> VWgradesSwedish2 { get; set; }
+        public virtual DbSet<VWsalaryInDepartments> VWsalaryInDepartments { get; set; }
+        public virtual DbSet<VWshowActiveCourses> VWshowActiveCourses { get; set; }
         public virtual DbSet<VWshowAllAdmin> VWshowAllAdmin { get; set; }
         public virtual DbSet<VWshowAllHeadMasters> VWshowAllHeadMasters { get; set; }
         public virtual DbSet<VWshowAllStaff> VWshowAllStaff { get; set; }
@@ -54,25 +59,6 @@ namespace SkolanDB.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Admin>(entity =>
-            {
-                entity.Property(e => e.AdminId).HasColumnName("AdminID");
-
-                entity.Property(e => e.Fname)
-                    .IsRequired()
-                    .HasColumnName("FName")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Lname)
-                    .IsRequired()
-                    .HasColumnName("LName")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Role)
-                    .IsRequired()
-                    .HasMaxLength(50);
-            });
-
             modelBuilder.Entity<Class>(entity =>
             {
                 entity.Property(e => e.ClassId).HasColumnName("ClassID");
@@ -91,19 +77,31 @@ namespace SkolanDB.Models
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.FkdepartmentId).HasColumnName("FKDepartmentID");
+
+                entity.HasOne(d => d.Fkdepartment)
+                    .WithMany(p => p.Course)
+                    .HasForeignKey(d => d.FkdepartmentId)
+                    .HasConstraintName("FK_Course_Department");
             });
 
-            modelBuilder.Entity<Grades>(entity =>
+            modelBuilder.Entity<Department>(entity =>
             {
-                entity.HasKey(e => e.GradeId)
-                    .HasName("PK_Grade");
+                entity.Property(e => e.DepartmentId).HasColumnName("DepartmentID");
 
-                entity.Property(e => e.GradeId).HasColumnName("GradeID");
+                entity.Property(e => e.DepartmentName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
-            modelBuilder.Entity<HeadMaster>(entity =>
+            modelBuilder.Entity<Employee>(entity =>
             {
-                entity.Property(e => e.HeadMasterId).HasColumnName("HeadMasterID");
+                entity.HasKey(e => e.EmploymentId);
+
+                entity.Property(e => e.EmploymentId).HasColumnName("EmploymentID");
+
+                entity.Property(e => e.FkroleId).HasColumnName("FKRoleID");
 
                 entity.Property(e => e.Fname)
                     .IsRequired()
@@ -115,7 +113,43 @@ namespace SkolanDB.Models
                     .HasColumnName("LName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Role)
+                entity.Property(e => e.Salary).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.StartDate).HasColumnType("date");
+
+                entity.HasOne(d => d.Fkrole)
+                    .WithMany(p => p.Employee)
+                    .HasForeignKey(d => d.FkroleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Employee_Role");
+            });
+
+            modelBuilder.Entity<EmployeeDepartment>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.Property(e => e.FkdepartmentId).HasColumnName("FKDepartmentID");
+
+                entity.Property(e => e.FkemploymentId).HasColumnName("FKEmploymentID");
+
+                entity.HasOne(d => d.Fkdepartment)
+                    .WithMany()
+                    .HasForeignKey(d => d.FkdepartmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeeDepartment_Department");
+
+                entity.HasOne(d => d.Fkemployment)
+                    .WithMany()
+                    .HasForeignKey(d => d.FkemploymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_EmployeeDepartment_Employee");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -155,11 +189,13 @@ namespace SkolanDB.Models
             {
                 entity.Property(e => e.StudentCourseId).HasColumnName("StudentCourseID");
 
+                entity.Property(e => e.EndDate).HasColumnType("date");
+
                 entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
 
-                entity.Property(e => e.FkstudentId).HasColumnName("FKStudentID");
+                entity.Property(e => e.FkemploymentId).HasColumnName("FKEmploymentID");
 
-                entity.Property(e => e.FkteacherId).HasColumnName("FKTeacherID");
+                entity.Property(e => e.FkstudentId).HasColumnName("FKStudentID");
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
@@ -169,75 +205,17 @@ namespace SkolanDB.Models
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StudentCourse_Course");
 
+                entity.HasOne(d => d.Fkemployment)
+                    .WithMany(p => p.StudentCourse)
+                    .HasForeignKey(d => d.FkemploymentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_StudentCourse_Employee");
+
                 entity.HasOne(d => d.Fkstudent)
                     .WithMany(p => p.StudentCourse)
                     .HasForeignKey(d => d.FkstudentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_StudentCourse_Student");
-
-                entity.HasOne(d => d.Fkteacher)
-                    .WithMany(p => p.StudentCourse)
-                    .HasForeignKey(d => d.FkteacherId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentCourse_Teacher");
-            });
-
-            modelBuilder.Entity<StudentGrade>(entity =>
-            {
-                entity.Property(e => e.StudentGradeId).HasColumnName("StudentGradeID");
-
-                entity.Property(e => e.FkcourseId).HasColumnName("FKCourseID");
-
-                entity.Property(e => e.FkgradeId).HasColumnName("FKGradeID");
-
-                entity.Property(e => e.FkstudentId).HasColumnName("FKStudentID");
-
-                entity.Property(e => e.FkteacherId).HasColumnName("FKTeacherID");
-
-                entity.Property(e => e.GradeDate).HasColumnType("date");
-
-                entity.HasOne(d => d.Fkcourse)
-                    .WithMany(p => p.StudentGrade)
-                    .HasForeignKey(d => d.FkcourseId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentGrade_Course");
-
-                entity.HasOne(d => d.Fkgrade)
-                    .WithMany(p => p.StudentGrade)
-                    .HasForeignKey(d => d.FkgradeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentGrade_Grades");
-
-                entity.HasOne(d => d.Fkstudent)
-                    .WithMany(p => p.StudentGrade)
-                    .HasForeignKey(d => d.FkstudentId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentGrade_Student");
-
-                entity.HasOne(d => d.Fkteacher)
-                    .WithMany(p => p.StudentGrade)
-                    .HasForeignKey(d => d.FkteacherId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_StudentGrade_Teacher");
-            });
-
-            modelBuilder.Entity<Teacher>(entity =>
-            {
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
-
-                entity.Property(e => e.Fname)
-                    .IsRequired()
-                    .HasColumnName("FName")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Lname)
-                    .IsRequired()
-                    .HasColumnName("LName")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.Role)
-                    .IsRequired()
-                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<VWallCoursesAllGrades>(entity =>
@@ -246,15 +224,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWAllCoursesAllGrades");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesBiology1>(entity =>
@@ -263,15 +235,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesBiology1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesChemistry1>(entity =>
@@ -280,15 +246,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesChemistry1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesEnglish1>(entity =>
@@ -297,15 +257,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesEnglish1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesEnglish2>(entity =>
@@ -314,15 +268,20 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesEnglish2");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<VWgradesEnglish3>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWGradesEnglish3");
 
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesHistory1>(entity =>
@@ -331,15 +290,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesHistory1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesHistory2>(entity =>
@@ -348,15 +301,9 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesHistory2");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
-
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
-
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
             });
 
             modelBuilder.Entity<VWgradesMathematics1>(entity =>
@@ -365,15 +312,31 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesMathematics1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<VWgradesMathematics2>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWGradesMathematics2");
 
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
 
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+            modelBuilder.Entity<VWgradesMathematics3>(entity =>
+            {
+                entity.HasNoKey();
 
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
+                entity.ToView("vWGradesMathematics3");
+
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             modelBuilder.Entity<VWgradesOneMonth>(entity =>
@@ -391,10 +354,6 @@ namespace SkolanDB.Models
                     .HasColumnName("FName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Grade)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.GradeDate).HasColumnType("date");
 
                 entity.Property(e => e.Lname)
@@ -409,15 +368,51 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWGradesSwedish1");
 
-                entity.Property(e => e.AverageGrade).HasColumnName("Average grade");
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<VWgradesSwedish2>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWGradesSwedish2");
 
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
+            });
 
-                entity.Property(e => e.HighestGrade).HasColumnName("Highest grade");
+            modelBuilder.Entity<VWsalaryInDepartments>(entity =>
+            {
+                entity.HasNoKey();
 
-                entity.Property(e => e.LowestGrade).HasColumnName("Lowest grade");
+                entity.ToView("vWSalaryInDepartments");
+
+                entity.Property(e => e.AverageSalary).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.DepartmentName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.SumSalaryMonth)
+                    .HasColumnName("SumSalary/Month")
+                    .HasColumnType("decimal(38, 0)");
+            });
+
+            modelBuilder.Entity<VWshowActiveCourses>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToView("vWShowActiveCourses");
+
+                entity.Property(e => e.ActiveCourses)
+                    .IsRequired()
+                    .HasColumnName("Active Courses")
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.CourseId).HasColumnName("CourseID");
             });
 
             modelBuilder.Entity<VWshowAllAdmin>(entity =>
@@ -436,7 +431,7 @@ namespace SkolanDB.Models
                     .HasColumnName("LName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Role)
+                entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -457,7 +452,7 @@ namespace SkolanDB.Models
                     .HasColumnName("LName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Role)
+                entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -478,7 +473,7 @@ namespace SkolanDB.Models
                     .HasColumnName("LName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.Role)
+                entity.Property(e => e.RoleName)
                     .IsRequired()
                     .HasMaxLength(50);
             });
@@ -489,11 +484,11 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWShowAllTeachers");
 
-                entity.Property(e => e.CourseId).HasColumnName("CourseID");
-
                 entity.Property(e => e.CourseName)
                     .IsRequired()
                     .HasMaxLength(50);
+
+                entity.Property(e => e.EmploymentId).HasColumnName("EmploymentID");
 
                 entity.Property(e => e.Fname)
                     .IsRequired()
@@ -505,7 +500,9 @@ namespace SkolanDB.Models
                     .HasColumnName("LName")
                     .HasMaxLength(50);
 
-                entity.Property(e => e.TeacherId).HasColumnName("TeacherID");
+                entity.Property(e => e.RoleName)
+                    .IsRequired()
+                    .HasMaxLength(50);
             });
 
             OnModelCreatingPartial(modelBuilder);

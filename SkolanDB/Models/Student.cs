@@ -12,7 +12,6 @@ namespace SkolanDB.Models
         public Student()
         {
             StudentCourse = new HashSet<StudentCourse>();
-            StudentGrade = new HashSet<StudentGrade>();
         }
 
         public int StudentId { get; set; }
@@ -24,6 +23,5 @@ namespace SkolanDB.Models
 
         public virtual Class Fkclass { get; set; }
         public virtual ICollection<StudentCourse> StudentCourse { get; set; }
-        public virtual ICollection<StudentGrade> StudentGrade { get; set; }
     }
 }

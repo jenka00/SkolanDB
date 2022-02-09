@@ -9,7 +9,7 @@ namespace SkolanDB.Models
 {
     public partial class VWshowAllAdmin
     {
-        public string Role { get; set; }
+        public string RoleName { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
     }

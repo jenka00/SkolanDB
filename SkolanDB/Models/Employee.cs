@@ -7,20 +7,21 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class Teacher
+    public partial class Employee
     {
-        public Teacher()
+        public Employee()
         {
             StudentCourse = new HashSet<StudentCourse>();
-            StudentGrade = new HashSet<StudentGrade>();
         }
 
-        public int TeacherId { get; set; }
+        public int EmploymentId { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
-        public string Role { get; set; }
+        public DateTime StartDate { get; set; }
+        public decimal Salary { get; set; }
+        public int FkroleId { get; set; }
 
+        public virtual Role Fkrole { get; set; }
         public virtual ICollection<StudentCourse> StudentCourse { get; set; }
-        public virtual ICollection<StudentGrade> StudentGrade { get; set; }
     }
 }

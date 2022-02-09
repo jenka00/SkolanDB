@@ -7,12 +7,12 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class VWshowAllTeachers
+    public partial class EmployeeDepartment
     {
-        public int EmploymentId { get; set; }
-        public string Fname { get; set; }
-        public string Lname { get; set; }
-        public string RoleName { get; set; }
-        public string CourseName { get; set; }
+        public int FkdepartmentId { get; set; }
+        public int FkemploymentId { get; set; }
+
+        public virtual Department Fkdepartment { get; set; }
+        public virtual Employee Fkemployment { get; set; }
     }
 }

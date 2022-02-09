@@ -7,16 +7,10 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class Grades
+    public partial class VWsalaryInDepartments
     {
-        public Grades()
-        {
-            StudentGrade = new HashSet<StudentGrade>();
-        }
-
-        public int GradeId { get; set; }
-        public int Grade { get; set; }
-
-        public virtual ICollection<StudentGrade> StudentGrade { get; set; }
+        public string DepartmentName { get; set; }
+        public decimal? SumSalaryMonth { get; set; }
+        public decimal? AverageSalary { get; set; }
     }
 }

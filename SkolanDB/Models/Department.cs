@@ -7,11 +7,16 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class HeadMaster
+    public partial class Department
     {
-        public int HeadMasterId { get; set; }
-        public string Fname { get; set; }
-        public string Lname { get; set; }
-        public string Role { get; set; }
+        public Department()
+        {
+            Course = new HashSet<Course>();
+        }
+
+        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
+
+        public virtual ICollection<Course> Course { get; set; }
     }
 }

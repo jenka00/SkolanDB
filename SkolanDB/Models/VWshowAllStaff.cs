@@ -9,8 +9,9 @@ namespace SkolanDB.Models
 {
     public partial class VWshowAllStaff
     {
-        public string Role { get; set; }
         public string Fname { get; set; }
         public string Lname { get; set; }
+        public string RoleName { get; set; }
+        public int? WorkingYears { get; set; }
     }
 }

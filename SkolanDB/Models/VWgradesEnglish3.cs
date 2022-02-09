@@ -7,11 +7,11 @@ using System.Collections.Generic;
 
 namespace SkolanDB.Models
 {
-    public partial class Admin
+    public partial class VWgradesEnglish3
     {
-        public int AdminId { get; set; }
-        public string Fname { get; set; }
-        public string Lname { get; set; }
-        public string Role { get; set; }
+        public string CourseName { get; set; }
+        public int? HighestGrade { get; set; }
+        public int? LowestGrade { get; set; }
+        public int? AverageGrade { get; set; }
     }
 }

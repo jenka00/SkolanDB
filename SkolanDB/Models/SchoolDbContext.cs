@@ -484,10 +484,6 @@ namespace SkolanDB.Models
 
                 entity.ToView("vWShowAllTeachers");
 
-                entity.Property(e => e.CourseName)
-                    .IsRequired()
-                    .HasMaxLength(50);
-
                 entity.Property(e => e.EmploymentId).HasColumnName("EmploymentID");
 
                 entity.Property(e => e.Fname)

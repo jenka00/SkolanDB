@@ -17,10 +17,11 @@ namespace SkolaTest
                 Console.WriteLine("Välj vad du vill göra." +
                                     "\n1. Se skolans personal" +
                                     "\n2. Se skolans elever" +
-                                    "\n3. Se betyg" +
-                                    "\n4. Lägga till nya elever" +
-                                    "\n5. Lägga till ny personal" +
-                                    "\n6. Avsluta");
+                                    "\n3. Se aktiva kurser" +
+                                    "\n4. Se betyg" +
+                                    "\n5. Lägga till nya elever" +
+                                    "\n6. Lägga till ny personal" +
+                                    "\n7. Avsluta");
 
                 string menuChoice = Console.ReadLine();
 
@@ -63,16 +64,31 @@ namespace SkolaTest
                                 }
                                 break;
                             case "3":
-                                var allTeachers = from VWshowAllTeachers in Context.VWshowAllTeachers
-                                                  select VWshowAllTeachers;
+                                var allTeachers = (from VWshowAllTeachers in Context.VWshowAllTeachers
+                                                  select VWshowAllTeachers).Distinct();
 
+                                //var teachersInDep = (from EmployeeDepartment in Context.EmployeeDepartment
+                                //                    join Employee in Context.Employee on EmployeeDepartment.FkemploymentId equals Employee.EmploymentId
+                                //                    join Department in Context.Department on EmployeeDepartment.FkdepartmentId equals Department.DepartmentId
+                                //                    select EmployeeDepartment).Distinct();
+
+                                var teachersInDep1 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 1).ToString();
+                                var teachersInDep2 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 2).ToString();
+                                var teachersInDep3 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 3).ToString();
+                                                                                                                 
                                 Console.WriteLine("Skolans Lärare:");
                                 Console.WriteLine(new string('-', (20)));
                                 foreach (var teachers in allTeachers)
                                 {
-                                    Console.WriteLine($"Namn: {teachers.Fname} {teachers.Lname} \nÄmne: {teachers.CourseName}");
+                                    Console.WriteLine($"Namn: {teachers.Fname} {teachers.Lname}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
+
+                                Console.WriteLine($"Antal lärare i Naturvetenskaplig avdelning: {teachersInDep1}");
+                                Console.WriteLine(new string('-', (20)));
+                                Console.WriteLine($"Antal lärare i Samhällsvetenskaplig avdelning: {teachersInDep2}");
+                                Console.WriteLine(new string('-', (20)));
+                                Console.WriteLine($"Antal lärare i Språklig avdelning: {teachersInDep3}");                              
                                 break;
                             case "4":
                                 var allAdmin = from VWshowAllAdmin in Context.VWshowAllAdmin
@@ -96,7 +112,8 @@ namespace SkolaTest
                                           "\n4. Klass 2A" +
                                           "\n5. Klass 2B" +
                                           "\n6. Klass 3A" +
-                                          "\n7. Klass 3B");
+                                          "\n7. Klass 3B" +
+                                          "\n8. Sök elev genom elevnummer");
                         string studentChoice = Console.ReadLine();
                         Console.Clear();
                         switch (studentChoice)
@@ -116,6 +133,7 @@ namespace SkolaTest
                                                       select Student;
 
                                     Console.WriteLine("Alla elever på skolan:");
+                                    Console.WriteLine(new string('-', (20)));
                                     foreach (var student in allStudents)
                                     {
                                         Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -129,6 +147,7 @@ namespace SkolaTest
                                                       select Student;
 
                                     Console.WriteLine("Alla elever på skolan:");
+                                    Console.WriteLine(new string('-', (20)));
                                     foreach (var student in allStudents)
                                     {
                                         Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -142,6 +161,7 @@ namespace SkolaTest
                                                       select Student;
 
                                     Console.WriteLine("Alla elever på skolan:");
+                                    Console.WriteLine(new string('-', (20)));
                                     foreach (var student in allStudents)
                                     {
                                         Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -155,6 +175,7 @@ namespace SkolaTest
                                                       select Student;
 
                                     Console.WriteLine("Alla elever på skolan:");
+                                    Console.WriteLine(new string('-', (20)));
                                     foreach (var student in allStudents)
                                     {
                                         Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -170,6 +191,7 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 1A:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class1A)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -183,6 +205,7 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 1B:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class1B)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -196,6 +219,7 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 2A:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class2A)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -209,6 +233,7 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 2B:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class2B)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -222,6 +247,7 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 3A:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class3A)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
@@ -235,21 +261,169 @@ namespace SkolaTest
                                               select Student;
 
                                 Console.WriteLine("Klass 3B:");
+                                Console.WriteLine(new string('-', (20)));
                                 foreach (var student in Class3B)
                                 {
                                     Console.WriteLine($"Namn: {student.Fname} {student.Lname} Personnummer: {student.PersonalNumber}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
                                 break;
+
+                            case "8":
+
+                                Console.WriteLine("Ange elevnummer");
+                                int studentNr = Convert.ToInt32(Console.ReadLine());
+                                Console.WriteLine("\n1. Visa information om vald elev" +
+                                                  "\n2. Ändra uppgifter hos vald elev");
+
+                                string userChoice = Console.ReadLine();
+
+                                var getStudentName = from Student in Context.Student
+                                                     join Class in Context.Class on Student.FkclassId equals Class.ClassId
+                                                     where Student.StudentId == studentNr
+                                                     select new
+                                                     {
+                                                         StudentFName = Student.Fname,
+                                                         StudentLName = Student.Lname,
+                                                         ClassName = Class.ClassName
+                                                     };
+
+                                var chosenStudent = from Student in Context.Student
+                                                    join StudentCourse in Context.StudentCourse on Student.StudentId equals StudentCourse.FkstudentId
+                                                    join Course in Context.Course on StudentCourse.FkcourseId equals Course.CourseId
+                                                    where Student.StudentId == studentNr
+                                                    select new
+                                                    {
+                                                        Course = Course.CourseName,
+                                                        Grade = StudentCourse.Grade,
+                                                        StartDate = StudentCourse.StartDate,
+                                                        EndDate = StudentCourse.EndDate
+                                                    };                             
+
+                                
+                                if (userChoice == "1")
+                                {
+                                    foreach (var studentName in getStudentName)
+                                    {
+                                        Console.WriteLine($"Namn: {studentName.StudentFName} {studentName.StudentLName} \nKlass: {studentName.ClassName}");
+                                    }
+                                    foreach (var studentAndClass in chosenStudent)
+                                    {
+                                        if (DateTime.Today > studentAndClass.StartDate && DateTime.Today < studentAndClass.EndDate)
+                                        {
+                                            Console.WriteLine($"Status: Pågående \t\tKurs: {studentAndClass.Course}");
+                                        }
+                                        else if (DateTime.Today > studentAndClass.EndDate)
+                                        {
+                                            Console.WriteLine($"Status: Avslutad \tKurs: {studentAndClass.Course} \t\tBetyg: {studentAndClass.Grade}");
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Status: Kommande \t\tKurs: {studentAndClass.Course}");
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                                else if (userChoice == "2")
+                                {
+                                    Console.WriteLine("\n1: Ändra förnamn." +
+                                                      "\n2: Ändra efternamn.Ange nytt efternamn");
+
+                                    string uChoice = Console.ReadLine();
+
+                                    if (uChoice == "1")
+                                    {
+                                        Console.WriteLine("Ange nytt förnamn");
+                                        string newFName = Console.ReadLine();
+
+                                        var thisStud = Context.Student.Where(c => c.StudentId == studentNr).FirstOrDefault();
+
+                                        if (thisStud is Student)
+                                        {
+                                            thisStud.Fname = newFName;
+                                            Context.SaveChanges();
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else if (uChoice == "2")
+                                    {
+                                        Console.WriteLine("Ange nytt efternamn");
+                                        string newLName = Console.ReadLine();
+
+                                        var thisStud = Context.Student.Where(c => c.StudentId == studentNr).FirstOrDefault();
+
+                                        if (thisStud is Student)
+                                        {
+                                            thisStud.Lname = newLName;
+                                            Context.SaveChanges();
+                                            break;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Felaktigt val.");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }                        
                         }
                         break;
+                    
                     case "3":
+                        Console.WriteLine("Aktiva kurser: ");
+                        //Using view VWshowActiveCourses
+                        //Console.WriteLine(new string('-', (20)));
+
+                        //var activeCourse = from VWshowActiveCourses in Context.VWshowActiveCourses
+                        //                   select VWshowActiveCourses;
+
+                        //foreach (var course in activeCourse)
+                        //{
+                        //    Console.WriteLine($"{course.ActiveCourses}");
+                        //    Console.WriteLine(new string('-', (20)));
+                        //}
+                    
+                        var activeCourses = (from StudentCourse in Context.StudentCourse
+                                            join Course in Context.Course on StudentCourse.FkcourseId equals Course.CourseId
+                                            where DateTime.Today > StudentCourse.StartDate && DateTime.Today < StudentCourse.EndDate                                        
+                                            select new
+                                            {
+                                                CourseName = Course.CourseName,
+                                                StartDate = StudentCourse.StartDate,
+                                                EndDate = StudentCourse.EndDate,
+                                                CourseID = Course.CourseId
+                                            }).Distinct();
+
+                        foreach (var course in activeCourses)
+                        {
+                            Console.WriteLine($"Kursnamn: {course.CourseName} \nStartdatum: {course.StartDate.ToString("d")}  \nSlutdatum: {course.EndDate.ToString("d")}");
+                            Console.WriteLine(new string('-', (20)));
+                        }
+                        break;
+
+                    case "4":
                         Console.WriteLine("Visa betyg" +
                                     "\n1. Senaste månadens betyg" +
                                     "\n2. Betyg i Biologi 1" +
                                     "\n3. Betyg i Kemi 1" +
                                     "\n4. Betyg i Engelska 1" +
-                                    "\n5. Betyg i Engelska 2");
+                                    "\n5. Betyg i Engelska 2" +
+                                    "\n6. Betyg i Engelska 3" +
+                                    "\n7. Betyg i Historia 1" +
+                                    "\n8. Betyg i Historia 2" +
+                                    "\n9. Betyg i Matematik 1");
 
                         string gradeChoice = Console.ReadLine();
 
@@ -319,11 +493,64 @@ namespace SkolaTest
                             case "5":
 
                                 Console.Clear();
-                                var GradesEnglish2 = from VWgradesEnglish2 in Context.VWgradesEnglish1
+                                var GradesEnglish2 = from VWgradesEnglish2 in Context.VWgradesEnglish2
                                                      select VWgradesEnglish2;
 
-                                Console.WriteLine("Engelska 1:");
+                                Console.WriteLine("Engelska 2:");
                                 foreach (var grade in GradesEnglish2)
+                                {
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
+                                    Console.WriteLine(new string('-', (20)));
+                                }
+                                break;
+
+                            case "6":
+                                Console.Clear();
+                                var GradesEnglish3 = from VWgradesEnglish3 in Context.VWgradesEnglish3
+                                                     select VWgradesEnglish3;
+                                Console.WriteLine("Engelska 3:");
+                                foreach (var grade in GradesEnglish3)
+                                {
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
+                                    Console.WriteLine(new string('-', (20)));
+                                }
+                                break;
+                            case "7":
+                                Console.Clear();
+                                var GradesHistory1 = from VWgradesHistory1 in Context.VWgradesHistory1
+                                                     select VWgradesHistory1;
+                                Console.WriteLine("Historia 1:");
+                                foreach (var grade in GradesHistory1)
+                                {
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
+                                    Console.WriteLine(new string('-', (20)));
+                                }
+                                break;
+                            case "8":
+                                Console.Clear();
+                                var GradesHistory2 = from VWgradesHistory2 in Context.VWgradesHistory2
+                                                     select VWgradesHistory2;
+                                Console.WriteLine("Historia 2:");
+                                foreach (var grade in GradesHistory2)
+                                {
+                                    Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
+                                    Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
+                                    Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
+                                    Console.WriteLine(new string('-', (20)));
+                                }
+                                break;
+                            case "9":
+                                Console.Clear();
+                                var Mathematics1 = from VWgradesMathematics1 in Context.VWgradesMathematics1
+                                                   select VWgradesMathematics1;
+                                Console.WriteLine("Matematik 1:");
+                                foreach (var grade in Mathematics1)
                                 {
                                     Console.WriteLine($"Medelbetyg: {grade.AverageGrade}");
                                     Console.WriteLine($"Högsta betyg: {grade.HighestGrade}");
@@ -333,9 +560,9 @@ namespace SkolaTest
                                 break;
                         }
                         break;
-                    case "4":
-                        break;
                     case "5":
+                        break;
+                    case "6":
                         Console.WriteLine("Lägg till ny personal. \nDu kan välja mellan att lägga till:" +
                             "\n1. Rektor " +
                             "\n2. Lärare " +
@@ -403,7 +630,7 @@ namespace SkolaTest
                             Context.SaveChanges();
                         }
                         break;
-                    case "6":
+                    case "7":
                         isRunning = false;
                         break;
                 }

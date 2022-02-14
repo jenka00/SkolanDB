@@ -67,11 +67,6 @@ namespace SkolaTest
                                 var allTeachers = (from VWshowAllTeachers in Context.VWshowAllTeachers
                                                   select VWshowAllTeachers).Distinct();
 
-                                //var teachersInDep = (from EmployeeDepartment in Context.EmployeeDepartment
-                                //                    join Employee in Context.Employee on EmployeeDepartment.FkemploymentId equals Employee.EmploymentId
-                                //                    join Department in Context.Department on EmployeeDepartment.FkdepartmentId equals Department.DepartmentId
-                                //                    select EmployeeDepartment).Distinct();
-
                                 var teachersInDep1 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 1).ToString();
                                 var teachersInDep2 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 2).ToString();
                                 var teachersInDep3 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 3).ToString();
@@ -273,11 +268,7 @@ namespace SkolaTest
 
                                 Console.WriteLine("Ange elevnummer");
                                 int studentNr = Convert.ToInt32(Console.ReadLine());
-                                Console.WriteLine("\n1. Visa information om vald elev" +
-                                                  "\n2. Ändra uppgifter hos vald elev");
-
-                                string userChoice = Console.ReadLine();
-
+                              
                                 var getStudentName = from Student in Context.Student
                                                      join Class in Context.Class on Student.FkclassId equals Class.ClassId
                                                      where Student.StudentId == studentNr
@@ -298,9 +289,14 @@ namespace SkolaTest
                                                         Grade = StudentCourse.Grade,
                                                         StartDate = StudentCourse.StartDate,
                                                         EndDate = StudentCourse.EndDate
-                                                    };                             
-
+                                                    };
                                 
+                                Console.WriteLine("\n1. Visa information om vald elev" +
+                                                "\n2. Ändra uppgifter hos vald elev" +
+                                                "\n3. Ta bort elev");
+
+                                string userChoice = Console.ReadLine();
+
                                 if (userChoice == "1")
                                 {
                                     foreach (var studentName in getStudentName)
@@ -327,8 +323,8 @@ namespace SkolaTest
                                 }
                                 else if (userChoice == "2")
                                 {
-                                    Console.WriteLine("\n1: Ändra förnamn." +
-                                                      "\n2: Ändra efternamn.Ange nytt efternamn");
+                                    Console.WriteLine("\n1: Ändra förnamn" +
+                                                      "\n2: Ändra efternamn");
 
                                     string uChoice = Console.ReadLine();
 
@@ -370,10 +366,26 @@ namespace SkolaTest
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Felaktigt val.");
+                                        Console.WriteLine("Felaktigt val");
                                         break;
                                     }
                                 }
+                                else if (userChoice == "3")
+                                {
+                                    var thisStud = Context.Student.Where(c => c.StudentId == studentNr).FirstOrDefault();
+
+                                    if (thisStud is Student)
+                                    {
+                                        Context.Remove(thisStud);
+                                        Context.SaveChanges();
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                
                                 else
                                 {
                                     break;
@@ -561,6 +573,33 @@ namespace SkolaTest
                         }
                         break;
                     case "5":
+                        Console.WriteLine("Lägg till ny elev.");
+                        Console.WriteLine("Förnamn:");
+                        string firstName = Console.ReadLine();
+                        Console.WriteLine("Efternamn:");
+                        string lastName = Console.ReadLine();
+                        Console.WriteLine("Personnummer: ");
+                        string personalNr = Console.ReadLine();                        
+                        Console.WriteLine("KlassID: ");
+                        int schoolClass = Convert.ToInt32(Console.ReadLine());                       
+
+                        Student newStudent = new Student
+                        {
+                            Fname = firstName,
+                            Lname = lastName,
+                            PersonalNumber = personalNr,
+                            Role = "Student",                            
+                            FkclassId = schoolClass 
+                        };
+
+                        Console.WriteLine($"Skapat ny student. Namn: {firstName} {lastName} " +
+                               $"\nPersonnummer: {personalNr} " +
+                               $"\nKlassID: {schoolClass}");
+
+                        Context.Student.Add(newStudent);
+                        Context.SaveChanges();
+                        Console.Clear();
+
                         break;
                     case "6":
                         Console.WriteLine("Lägg till ny personal. \nDu kan välja mellan att lägga till:" +

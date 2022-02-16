@@ -18,7 +18,7 @@ namespace SkolaTest
                                     "\n1. Personal" +
                                     "\n2. Elever" +
                                     "\n3. Aktiva kurser" +
-                                    "\n4. Betyg" +                                                                    
+                                    "\n4. Betyg" +
                                     "\n5. Avsluta");
 
                 string menuChoice = Console.ReadLine();
@@ -27,7 +27,7 @@ namespace SkolaTest
 
                 switch (menuChoice)
                 {
-                    case "1":                        
+                    case "1":
                         Console.WriteLine("1. Visa all personal" +
                                           "\n2. Visa alla rektorer " +
                                           "\n3. Visa alla lärare " +
@@ -70,7 +70,7 @@ namespace SkolaTest
                                 var teachersInDep1 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 11).ToString();
                                 var teachersInDep2 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 12).ToString();
                                 var teachersInDep3 = Context.EmployeeDepartment.Count(p => p.FkdepartmentId == 13).ToString();
-                                                                                                                 
+
                                 Console.WriteLine("Skolans Lärare:");
                                 Console.WriteLine(new string('-', (20)));
                                 foreach (var teachers in allTeachers)
@@ -83,7 +83,7 @@ namespace SkolaTest
                                 Console.WriteLine(new string('-', (20)));
                                 Console.WriteLine($"Antal lärare i Samhällsvetenskaplig avdelning: {teachersInDep2}");
                                 Console.WriteLine(new string('-', (20)));
-                                Console.WriteLine($"Antal lärare i Språklig avdelning: {teachersInDep3}");                              
+                                Console.WriteLine($"Antal lärare i Språklig avdelning: {teachersInDep3}");
                                 break;
                             case "4":
                                 var allAdmin = from VWshowAllAdmin in Context.VWshowAllAdmin
@@ -119,8 +119,8 @@ namespace SkolaTest
                                 if (role == 1)
                                 {
                                     Console.WriteLine($"Skapat ny rektor. Namn: {firstNameInput} {lastNameInput} " +
-                                        $"\nAnställningsdatum: {employmentDate} " +
-                                        $"\nLön: ");
+                                        $"\nAnställningsdatum: {employmentDate:d} " +
+                                        $"\nLön: {salary:C}");
 
                                     Employee newEmployee = new Employee
                                     {
@@ -132,6 +132,12 @@ namespace SkolaTest
 
                                     Context.Employee.Add(newEmployee);
                                     Context.SaveChanges();
+
+                                    EmployeeDepartment newEmpDep = new EmployeeDepartment
+                                    {
+                                        FkemploymentId = newEmployee.EmploymentId,
+                                        FkdepartmentId = department
+                                    };
                                 }
                                 else if (role == 2)
                                 {
@@ -155,15 +161,15 @@ namespace SkolaTest
                                         FkemploymentId = newEmployee.EmploymentId,
                                         FkdepartmentId = department
                                     };
-                                    
+
                                     Context.EmployeeDepartment.Add(newEmpDep);
                                     Context.SaveChanges();
                                 }
                                 else if (role == 3)
                                 {
-                                    Console.WriteLine($"Skapat ny administratör.Namn: {firstNameInput} {lastNameInput} " +
-                                        $"\nAnställningsdatum: {employmentDate} " +
-                                        $"\nLön: ");
+                                    Console.WriteLine($"Skapat ny administratör. Namn: {firstNameInput} {lastNameInput} " +
+                                        $"\nAnställningsdatum: {employmentDate:d} " +
+                                        $"\nLön: {salary:C} ");
                                     Employee newEmployee = new Employee
                                     {
                                         Fname = firstNameInput,
@@ -174,6 +180,12 @@ namespace SkolaTest
                                     };
                                     Context.Employee.Add(newEmployee);
                                     Context.SaveChanges();
+
+                                    EmployeeDepartment newEmpDep = new EmployeeDepartment
+                                    {
+                                        FkemploymentId = newEmployee.EmploymentId,
+                                        FkdepartmentId = department
+                                    };
                                 }
                                 break;
 
@@ -363,7 +375,7 @@ namespace SkolaTest
 
                                 Console.WriteLine("Ange elevnummer");
                                 int studentNr = Convert.ToInt32(Console.ReadLine());
-                              
+
                                 var getStudentName = from Student in Context.Student
                                                      join Class in Context.Class on Student.FkclassId equals Class.ClassId
                                                      where Student.StudentId == studentNr
@@ -386,7 +398,7 @@ namespace SkolaTest
                                                         StartDate = StudentCourse.StartDate,
                                                         EndDate = StudentCourse.EndDate
                                                     };
-                                
+
                                 Console.WriteLine("\n1. Visa information om vald elev" +
                                                 "\n2. Ändra uppgifter hos vald elev" +
                                                 "\n3. Ta bort elev");
@@ -411,9 +423,9 @@ namespace SkolaTest
                                         }
                                         else
                                         {
-                                            Console.WriteLine("Status: Kommande \t\tKurs: {studentAndClass.Course}");                                            
+                                            Console.WriteLine("Status: Kommande \t\tKurs: {studentAndClass.Course}");
                                         }
-                                    }                                    
+                                    }
                                 }
                                 else if (userChoice == "2")
                                 {
@@ -432,8 +444,8 @@ namespace SkolaTest
                                         if (thisStud is Student)
                                         {
                                             thisStud.Fname = newFName;
-                                            Context.SaveChanges();                                            
-                                        }                                        
+                                            Context.SaveChanges();
+                                        }
                                     }
                                     else if (uChoice == "2")
                                     {
@@ -445,12 +457,12 @@ namespace SkolaTest
                                         if (thisStud is Student)
                                         {
                                             thisStud.Lname = newLName;
-                                            Context.SaveChanges();                                         
-                                        }                                      
+                                            Context.SaveChanges();
+                                        }
                                     }
                                     else
                                     {
-                                        Console.WriteLine("Felaktigt val");                                        
+                                        Console.WriteLine("Felaktigt val");
                                     }
                                 }
                                 else if (userChoice == "3")
@@ -460,8 +472,8 @@ namespace SkolaTest
                                     if (thisStud is Student)
                                     {
                                         Context.Remove(thisStud);
-                                        Context.SaveChanges();                                       
-                                    }                                   
+                                        Context.SaveChanges();
+                                    }
                                 }
                                 break;
 
@@ -495,32 +507,21 @@ namespace SkolaTest
 
                                 break;
                         }
-                        break;                        
-                    
+                        break;
+
                     case "3":
                         Console.WriteLine("Aktiva kurser: ");
-                        //Using view VWshowActiveCourses
-                        //Console.WriteLine(new string('-', (20)));
-
-                        //var activeCourse = from VWshowActiveCourses in Context.VWshowActiveCourses
-                        //                   select VWshowActiveCourses;
-
-                        //foreach (var course in activeCourse)
-                        //{
-                        //    Console.WriteLine($"{course.ActiveCourses}");
-                        //    Console.WriteLine(new string('-', (20)));
-                        //}
-                    
+                       
                         var activeCourses = (from StudentCourse in Context.StudentCourse
-                                            join Course in Context.Course on StudentCourse.FkcourseId equals Course.CourseId
-                                            where DateTime.Today > StudentCourse.StartDate && DateTime.Today < StudentCourse.EndDate                                        
-                                            select new
-                                            {
-                                                CourseName = Course.CourseName,
-                                                StartDate = StudentCourse.StartDate,
-                                                EndDate = StudentCourse.EndDate,
-                                                CourseID = Course.CourseId
-                                            }).Distinct();
+                                             join Course in Context.Course on StudentCourse.FkcourseId equals Course.CourseId
+                                             where DateTime.Today > StudentCourse.StartDate && DateTime.Today < StudentCourse.EndDate
+                                             select new
+                                             {
+                                                 CourseName = Course.CourseName,
+                                                 StartDate = StudentCourse.StartDate,
+                                                 EndDate = StudentCourse.EndDate,
+                                                 CourseID = Course.CourseId
+                                             }).Distinct();
 
                         foreach (var course in activeCourses)
                         {
@@ -647,7 +648,7 @@ namespace SkolaTest
                                     Console.WriteLine($"Lägsta betyg: {grade.LowestGrade}");
                                     Console.WriteLine(new string('-', (20)));
                                 }
-                                break;                        
+                                break;
                         }
                         break;
 
@@ -660,6 +661,6 @@ namespace SkolaTest
                 Console.Clear();
             }
             while (isRunning);
-        }           
+        }
     }
 }

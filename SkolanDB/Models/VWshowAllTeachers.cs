@@ -13,5 +13,7 @@ namespace SkolanDB.Models
         public string Fname { get; set; }
         public string Lname { get; set; }
         public string RoleName { get; set; }
+        public string DepartmentName { get; set; }
+        public string CourseName { get; set; }
     }
 }

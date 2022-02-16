@@ -9,6 +9,7 @@ namespace SkolanDB.Models
 {
     public partial class EmployeeDepartment
     {
+        public int EmpDepId { get; set; }
         public int FkdepartmentId { get; set; }
         public int FkemploymentId { get; set; }
 

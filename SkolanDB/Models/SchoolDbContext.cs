@@ -126,20 +126,22 @@ namespace SkolanDB.Models
 
             modelBuilder.Entity<EmployeeDepartment>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.EmpDepId);
+
+                entity.Property(e => e.EmpDepId).HasColumnName("EmpDepID");
 
                 entity.Property(e => e.FkdepartmentId).HasColumnName("FKDepartmentID");
 
                 entity.Property(e => e.FkemploymentId).HasColumnName("FKEmploymentID");
 
                 entity.HasOne(d => d.Fkdepartment)
-                    .WithMany()
+                    .WithMany(p => p.EmployeeDepartment)
                     .HasForeignKey(d => d.FkdepartmentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeeDepartment_Department");
 
                 entity.HasOne(d => d.Fkemployment)
-                    .WithMany()
+                    .WithMany(p => p.EmployeeDepartment)
                     .HasForeignKey(d => d.FkemploymentId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_EmployeeDepartment_Employee");
@@ -483,6 +485,14 @@ namespace SkolanDB.Models
                 entity.HasNoKey();
 
                 entity.ToView("vWShowAllTeachers");
+
+                entity.Property(e => e.CourseName)
+                    .IsRequired()
+                    .HasMaxLength(50);
+
+                entity.Property(e => e.DepartmentName)
+                    .IsRequired()
+                    .HasMaxLength(50);
 
                 entity.Property(e => e.EmploymentId).HasColumnName("EmploymentID");
 

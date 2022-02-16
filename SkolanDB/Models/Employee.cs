@@ -11,6 +11,7 @@ namespace SkolanDB.Models
     {
         public Employee()
         {
+            EmployeeDepartment = new HashSet<EmployeeDepartment>();
             StudentCourse = new HashSet<StudentCourse>();
         }
 
@@ -22,6 +23,7 @@ namespace SkolanDB.Models
         public int FkroleId { get; set; }
 
         public virtual Role Fkrole { get; set; }
+        public virtual ICollection<EmployeeDepartment> EmployeeDepartment { get; set; }
         public virtual ICollection<StudentCourse> StudentCourse { get; set; }
     }
 }

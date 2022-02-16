@@ -12,11 +12,13 @@ namespace SkolanDB.Models
         public Department()
         {
             Course = new HashSet<Course>();
+            EmployeeDepartment = new HashSet<EmployeeDepartment>();
         }
 
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
 
         public virtual ICollection<Course> Course { get; set; }
+        public virtual ICollection<EmployeeDepartment> EmployeeDepartment { get; set; }
     }
 }

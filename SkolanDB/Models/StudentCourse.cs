@@ -20,6 +20,5 @@ namespace SkolanDB.Models
         public virtual Course Fkcourse { get; set; }
         public virtual Employee Fkemployment { get; set; }
         public virtual Student Fkstudent { get; set; }
-
     }
 }
